@@ -6,10 +6,14 @@ import plotly.graph_objects as go
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-
+# '/' root URL of application
+#  methods=['GET', 'POST'] behavior of the function depends on if the request is a GET or POST
+# runs each time a user makes a request to the root URL
 @app.route('/', methods=['GET', 'POST'])
 def main_dashboard():
     news_data = get_news_data()
+    # check if the current request to the Flask application is a post request
+    # typically used to handle form submissions and perform specific actions based on data submitted in the form
     if request.method == 'POST':
         # Get the stock ticker entered by the user from the form
         stock_symbol = request.form['stock_ticker']
@@ -59,7 +63,10 @@ def calculate_stock_overview(stock_data):
 
 
 def create_candlestick_chart(dataframe, symbol):
-    fig = go.Figure(data=[go.Candlestick(x=dataframe["date"],
+    # creates a new instance of a Plotly 'go.Figure' object
+    # A 'go.Figure' object is sued to define the structure and properties of the plot or chart
+    fig = go.Figure(data=[go.Candlestick(x=dataframe["date"],   # A data arguement is passed which contains traces for the figure.
+                                         # go.Candlestick represents the candlestick chart trace
                                         open=dataframe["open"],
                                         high=dataframe["high"],
                                         low=dataframe["low"],
@@ -67,11 +74,12 @@ def create_candlestick_chart(dataframe, symbol):
 
     start_date = dataframe.iloc[0, 0].strftime("%Y-%m-%d")
     end_date = dataframe.iloc[-1, 0].strftime("%Y-%m-%d")
+    # modify aspects of the chart's appearance and behavior
     fig.update_layout(
         title=f"Candlestick Chart - {symbol} ({start_date} to {end_date})",
         xaxis_title="Date",
         yaxis_title="Price",
-        xaxis_rangeslider_visible=False,
+        xaxis_rangeslider_visible=True,
         width = 1200,  # Set the width to 1200 pixels (4 times the default)
         height = 600  # Set the height to 600 pixels (2 times the default)
     )

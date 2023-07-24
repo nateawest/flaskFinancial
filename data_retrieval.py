@@ -51,8 +51,8 @@ def get_stock_data(symbol):
 
 
 def get_news_data():
-
-    # replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
+    # API response contains a key named "News_sentiment"
+    # Captures the value associated with a key from the data dictionary
     base_url = "https://www.alphavantage.co/query"
     function = "NEWS_SENTIMENT"
     params = {
@@ -68,7 +68,7 @@ def get_news_data():
         print("no news data")
         return []
 
-
+# test the function outside of main
 if __name__ == "__main__":
     symbol = "AAPL"
     trade_data = get_stock_data(symbol)
