@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .main-container {
+            display: flex;
+            flex-direction: column; /* Use column to create a vertical layout */
+            align-items: flex-end; /* Center the elements horizontally */
+            max-width: 1200px; /* Set a max-width for the main container */
+            margin: 0 auto; /* Center the main container on the page */
+            padding: 20px; /* Add some padding for spacing */
+            /* Your existing CSS styles here... */
+        }
+        .content-container {
+            /* Adjust the width of the content container */
+            width: calc(100% - 220px); /* 220px for the sidebar width */
+            /* Your existing CSS styles here... */
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #222; /* Dark background color */
+            color: #ddd; /* Light text color */
+            font-family: Arial, sans-serif;
+        }
+
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px; /* Set a max-width for the content container */
+            width: 90%; /* Set the width to 90% of the available width */
+            background-color: #333; /* Slightly lighter background for the content container */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add a slight shadow for depth */
+        }
+
+        h1 {
+            color: #fff; /* White color for the title */
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        /* Additional styles for input fields and buttons */
+        input[type="text"], input[type="submit"] {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            color: #333;
+            background-color: #ddd; /* Lighter background for input fields */
+        }
+
+        input[type="submit"] {
+            background-color: #555; /* Slightly darker background for the submit button */
+            color: #fff; /* White text for the submit button */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #444; /* Darker background on hover */
+        }
+
+        #search-description {
+            color: #aaa; /* Lighter text color for the description */
+            margin-top: 10px;
+        }
+
+        /* Add some padding for the table */
+        table {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid #444; /* Darker border for the table */
+            border-collapse: collapse;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #555; /* Darker background for table headers */
+            color: #fff; /* White text for table headers */
+        }
+         #logo {
+            position: absolute;
+            top: 10px;
+            right: 80px;
+            width: 200px; /* Set the desired width of the image */
+            height: auto; /* Maintain the image's aspect ratio */
+            border-radius: 50%; /* Add a circular border to the image */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+        }
+
+    </style>
+    <title>Stock Tracking Dashboard - Main</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<!-- Add the image element with the id "logo" -->
+    <img id="logo" src="{{ url_for('static', filename='images/bear.png') }}" alt="Logo">
+
+    <div class="content-container">
+        <h1>Bare Stock Market Dashboard</h1>
+        <!-- Add a form for users to enter their stock ticker -->
+        <form method="post">
+            <label for="stock_ticker">Enter Stock Ticker: </label>
+            <input type="text" id="stock_ticker" name="stock_ticker">
+            <input type="submit" value="Get Data">
+        </form>
+        <p></p>
+        <br>
+        <a href="https://content.ftserussell.com/sites/default/files/ru2000_membershiplist_20220624_0.pdf" target="_blank">Russell 2000 Ticker Symbols</a>
+
+        <!-- Display the stock overview section -->
+        {% if stock_overview is not none %}
+            <h2>Stock Overview for {{ stock_symbol }}</h2>
+            <p>Date: {{ stock_overview.date }}</p>
+            <p>Current Price: ${{ stock_overview.current_price }}</p>
+            <p>Daily Change: ${{ stock_overview.daily_change }}</p>
+            <p>Percentage Change: {{ stock_overview.percentage_change }}%</p>
+        {% endif %}
+
+        <!-- Check if stock_data is not None and not empty before trying to use it -->
+        {% if stock_data is not none and not stock_data.empty %}
+            <!-- Add a div container for the candlestick chart -->
+            <div id="candlestick_chart"></div>
+
+            <script>
+                var chartJson = {{ chart_json|safe }};
+                Plotly.newPlot('candlestick_chart', chartJson.data, chartJson.layout);
+            </script>
+        {% endif %}
+
+        {% if error_msg %}
+            <!-- Display an error message if data retrieval fails -->
+            <p>{{ error_msg }}</p>
+        {% endif %}
+        <!-- Display News Data -->
+        {% if news_data %}
+            <h2>News Headlines</h2>
+            <ul>
+                {% for article in news_data %}
+                <li>
+                    <a href="{{ article.url }}" target="_blank">{{ article.title }}</a>
+                    - Sentiment Score: {{ article.overall_sentiment_score }}<br><br>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>Submit request to receive news data.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+
