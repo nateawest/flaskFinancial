@@ -3,12 +3,9 @@ Flask Financial Web Application
 Overview
 This is a web application built using Python FLask that allows users to submit a stock ticker and view market data and financial news articles
 Features
-
-    Enter a stock ticker to get stock data, including open price, high price, low price, close price, and volume.
-    View a candlestick chart for the stock's price movement over a selected time period.
-    Fetch and display financial news headlines.
-    Calculate and display stock overview metrics, such as the current price, daily change, and percentage change.
-    Secure API key storage using a .env file (not included in the repository).
+Enter a stock ticker to get stock data, including open price, high price, low price, close price, and volume.
+View a candlestick chart fot he stock's price movement over a selected time period.
+Fetch and display financial news headlines.
 
 Getting Started
 To run the web application locally, follow these steps:
@@ -28,9 +25,9 @@ To run the web application locally, follow these steps:
 
 Technologies Used
 
-    Python 3.5+
-    Flask micro web framework
-    Plotly library for creating interactive visualizations
-    Pandas library for data manipulation
-    Jinja2 templating engine for HTML templates
+Python 3.5+
+Flask micro web framework
+Plotly library for creating interactive visualizations
+Pandas library for data manipulation
+Jinja2 templating engine for HTML templates
 
